@@ -29,16 +29,14 @@ labeler = SimpleLabeler(excel_path)
 
 def reading_pdf(uploaded_file, dpi=300) -> str:
     text_content = ''
-    # Use BytesIO to create a file-like object from the uploaded file bytes
     file_stream = BytesIO(uploaded_file.getvalue())
 
-    # Initialize the PDF reader with the file-like object
     pdf_reader = PyPDF2.PdfReader(file_stream)
 
     for page in pdf_reader.pages:
         text = page.extract_text()
         if text:
-            text_content += text.lower() + "\n"  # Append text of each page
+            text_content += text.lower() + "\n" 
     return text_content
 
 def configure_retriever(uploaded_files, openai_api_key):
@@ -47,12 +45,10 @@ def configure_retriever(uploaded_files, openai_api_key):
         documents = []
         with tempfile.TemporaryDirectory() as temp_dir:
             for uploaded_file in uploaded_files:
-                # Write the uploaded file to a temporary directory
                 temp_filepath = os.path.join(temp_dir, uploaded_file.name)
                 with open(temp_filepath, "wb") as f:
                     f.write(uploaded_file.getvalue())
         
-                # Determine the file type and use the appropriate loader
                 if uploaded_file.name.endswith('.pdf'):
                     loader = PyPDFLoader(temp_filepath)
                 elif uploaded_file.name.endswith(('.docx', '.doc')):
@@ -60,19 +56,18 @@ def configure_retriever(uploaded_files, openai_api_key):
                 elif uploaded_file.name.endswith('.txt'):
                     loader = TextLoader(temp_filepath)
                 else:
-                    continue  # Skip unsupported file types
-                # Load the document content and add it to the documents list
+                    continue 
+
                 documents.extend(loader.load())
 
-                # Split documents
+    
         text_splitter = CharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
         splits = text_splitter.split_documents(documents)
 
-        # Create embeddings and store in vectordb
         embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key, model="text-embedding-ada-002")
         vectordb = FAISS.from_documents(splits, embeddings)
 
-        # Define retriever
+
         retriever = vectordb.as_retriever(search_type="mmr", search_kwargs={"k": 2, "fetch_k": 4})
 
         return retriever
@@ -92,12 +87,10 @@ def display_chatbot_interface(uploaded_files, openai_api_key):
 
     retriever = configure_retriever(uploaded_files, openai_api_key)
 
-    # Setup memory for contextual conversation
     msgs = StreamlitChatMessageHistory()
     display_greeting(msgs)
     memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
-    # Setup LLM and QA chain
     llm = ChatOpenAI(
         model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
     )
@@ -129,7 +122,6 @@ class StreamHandler(BaseCallbackHandler):
         self.run_id_ignore_token = None
 
     def on_llm_start(self, serialized: dict, prompts: list, **kwargs):
-        # Workaround to prevent showing the rephrased question as output
         if prompts[0].startswith("Human"):
             self.run_id_ignore_token = kwargs.get("run_id")
 
@@ -138,7 +130,6 @@ class StreamHandler(BaseCallbackHandler):
             return
         self.text += token
         self.container.markdown(self.text)
-
 
 class PrintRetrievalHandler(BaseCallbackHandler):
     def __init__(self, container):
@@ -161,21 +152,20 @@ def display_pdf_interface(uploaded_file):
     if uploaded_file is not None:
         with st.spinner('Processing...'):
             text_content = reading_pdf(uploaded_file)
-            doc = labeler(text_content)  # Process text with SimpleLabeler
+            doc = labeler(text_content)
             colors = {
-                'Development Progress': '#FF5733',      # A strong red for progress-related topics
-                'Impact on Society': '#33FF57',         # A vibrant green for societal impacts
-                'Healthcare': '#3357FF',                # A calming blue for healthcare
-                'Education': '#FF33FF',                 # A pink for educational aspects
-                'Urban AI Implementation': '#FFFF33',   # A bright yellow for urban AI implementations
-                'Ethical Considerations': '#FF8333',    # An orange for ethics in AI
-                'Public Policy': '#33FFF6',             # A teal for public policy discussions
-                'Technological Advancements': '#F633FF',# A purple for technology advancements
-                'AI and Employment': '#8C33FF',         # An indigo for AI's impact on employment
-                'Transportation': '#33FF8A'             # A light green for transportation
+                'Development Progress': '#FF5733',      
+                'Impact on Society': '#33FF57',         
+                'Healthcare': '#3357FF',                
+                'Education': '#FF33FF',                 
+                'Urban AI Implementation': '#FFFF33',   
+                'Ethical Considerations': '#FF8333',    
+                'Public Policy': '#33FFF6',             
+                'Technological Advancements': '#F633FF',
+                'AI and Employment': '#8C33FF',         
+                'Transportation': '#33FF8A'             
             }
-            # Visualization of entities
-            labels = [label.upper() for label in labeler.labels]  # Use the labels from your labeler instance
+            labels = [label.upper() for label in labeler.labels] 
             visualize_ner(doc, labels=labels, colors=colors)
             processed = True
     return processed
@@ -183,7 +173,7 @@ def display_pdf_interface(uploaded_file):
 def app():
     st.set_page_config(page_title="PDF and Chatbot Interface", layout="wide")
     
-    st.title("PDF Analysis Interface")
+    st.title("NER AI Chatbot 🤖")
 
     openai_api_key = st.text_input("OpenAI API Key", type="password")
     if not openai_api_key:
@@ -194,16 +184,15 @@ def app():
 
     if uploaded_files:
         uploaded_files = [uploaded_files] if not isinstance(uploaded_files, list) else uploaded_files
-        # Splitting the page into two columns
-        col1, col2 = st.columns([3, 3])  # Adjust the ratio as needed
+        col1, col2 = st.columns([3, 3])
 
         with col1:
-            st.header("PDF Interface")
+            st.header("PDF Content")
             processed = [display_pdf_interface(uploaded_file) for uploaded_file in uploaded_files]
         
         if all(processed):
             with col2:
-                st.header("Chatbot")
+                st.header("AI Chatbot")
                 display_chatbot_interface(uploaded_files, openai_api_key)
 
 if __name__ == "__main__":
