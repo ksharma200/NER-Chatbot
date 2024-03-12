@@ -12,14 +12,18 @@ class SimpleLabeler():
         self.t_nlp.begin_training()
         self.excel_df = pd.read_excel(excel_path, sheet_name='Label')
         self.matcher = Matcher(vocab=self.t_nlp.vocab)
-        self.labels = []
+        self.labels = list(self.excel_df.columns)
         self.load_stuff()
 
     def load_stuff(self):
         for label in self.excel_df.columns:
-            patterns = [[{'LOWER': text.lower()}] for text in self.excel_df[label].dropna().unique()]
-            for pattern in patterns:
-                self.matcher.add(label.upper(), patterns)
+            for text in self.excel_df[label].dropna().unique():
+                words = text.split()
+                if len(words) > 1:  # If the label text is more than one word
+                    pattern = [{'LOWER': word.lower()} for word in words]
+                else:
+                    pattern = [{'LOWER': words[0].lower()}]
+                self.matcher.add(label.upper(), [pattern])
 
     def __call__(self, text):
         doc = self.t_nlp(text)
