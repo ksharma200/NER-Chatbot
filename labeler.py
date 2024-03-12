@@ -19,7 +19,7 @@ class SimpleLabeler():
         for label in self.excel_df.columns:
             for text in self.excel_df[label].dropna().unique():
                 words = text.split()
-                if len(words) > 1:  # If the label text is more than one word
+                if len(words) > 1: 
                     pattern = [{'LOWER': word.lower()} for word in words]
                 else:
                     pattern = [{'LOWER': words[0].lower()}]
