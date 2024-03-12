@@ -163,10 +163,16 @@ def display_pdf_interface(uploaded_file):
             text_content = reading_pdf(uploaded_file)
             doc = labeler(text_content)  # Process text with SimpleLabeler
             colors = {
-                'LABEL1': '#4888A8',
-                'LABEL2': '#9C63A6',
-                'LABEL 3': '#9E63B6',
-                'LABEL 4': '#9D63C6'
+                'Development Progress': '#FF5733',      # A strong red for progress-related topics
+                'Impact on Society': '#33FF57',         # A vibrant green for societal impacts
+                'Healthcare': '#3357FF',                # A calming blue for healthcare
+                'Education': '#FF33FF',                 # A pink for educational aspects
+                'Urban AI Implementation': '#FFFF33',   # A bright yellow for urban AI implementations
+                'Ethical Considerations': '#FF8333',    # An orange for ethics in AI
+                'Public Policy': '#33FFF6',             # A teal for public policy discussions
+                'Technological Advancements': '#F633FF',# A purple for technology advancements
+                'AI and Employment': '#8C33FF',         # An indigo for AI's impact on employment
+                'Transportation': '#33FF8A'             # A light green for transportation
             }
             # Visualization of entities
             labels = [label.upper() for label in labeler.labels]  # Use the labels from your labeler instance
