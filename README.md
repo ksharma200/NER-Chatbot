@@ -16,18 +16,28 @@ Please run the following command to install required libraries: 'pip install req
 
 ## Step 2: Upload PDF, DOC/DOCX, or TXT File For Analysis
 
+a:
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/0229b6af-9905-45b7-8e31-356117bb9a46)
 <br/>
+
+b:
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/1809f29c-1f71-4ece-ba5b-5425c164349f)
 
 ## Step 3: Toggle Labeled Entities 
 
+a:
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/95bcc61e-808f-490d-8d51-66107388f6f2)
 <br/>
+
+b:
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/b0ba3956-7c50-46a9-be60-d53b8be5cdca)
 <br/>
+
+c:
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/cc9cb605-15ea-48f6-bef6-3f31fc6c0a2b)
 <br/>
+
+d:
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/83fbc243-fbea-4ee9-9aa7-f9c1d3b74b7e)
 
 ## Step 4: Query Chatbot For Text Retrieval, Document Insights, and Summarization
