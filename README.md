@@ -12,6 +12,8 @@ In the example steps below, a 52 page PDF file was analyzed to label and highlig
 
 Please run the following command to install required libraries: 'pip install requirements.txt'
 
+---
+
 ## Step 1: Input OpenAI API Key
 
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/034ae2c8-9340-48c3-b045-1858a7f9cbf2)
@@ -26,7 +28,6 @@ Please run the following command to install required libraries: 'pip install req
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/1809f29c-1f71-4ece-ba5b-5425c164349f)
 
 ---
-
 
 ## Step 3: Toggle Labeled Entities 
 
@@ -46,7 +47,6 @@ Please run the following command to install required libraries: 'pip install req
 ![image](https://github.com/ksharma200/NER-Chatbot/assets/156555405/83fbc243-fbea-4ee9-9aa7-f9c1d3b74b7e)
 
 ---
-
 
 ## Step 4: Query Chatbot For Text Retrieval, Document Insights, and Summarization
 
